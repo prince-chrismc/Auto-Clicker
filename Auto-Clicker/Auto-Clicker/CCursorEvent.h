@@ -1,3 +1,5 @@
+/*
+
 MIT License
 
 Copyright (c) 2018 Chris McArthur, prince.chrismc(at)gmail(dot)com
@@ -19,3 +21,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+*/
+
+#pragma once
+
+class CCursorEvent
+{
+public:
+
+   enum ECursorEvent
+   {
+      CLICK,
+      MOVE
+   };
+
+   CCursorEvent( ECursorEvent eEvent );
+   ~CCursorEvent() = default;
+
+   void Execute();
+
+private:
+   ECursorEvent    m_eEvent;
+   std::mt19937_64 m_RandGen;
+};
