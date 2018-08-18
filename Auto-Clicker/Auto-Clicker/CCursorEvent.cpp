@@ -5,9 +5,11 @@
 #include <windows.h>
 #include <thread>
 
-using namespace std::chrono_literals;
-
 CCursorEvent::CCursorEvent( ECursorEvent eEvent ) : m_eEvent( eEvent ), m_RandGen( std::random_device{}( ) )
+{
+}
+
+CCursorEvent::CCursorEvent( const CCursorEvent & oEvent ) : CCursorEvent( oEvent.m_eEvent )
 {
 }
 
@@ -22,6 +24,10 @@ void CCursorEvent::Execute()
       break;
    case MOVE:
       // TBA
+      break;
+
+   case PAUSE:
+      std::this_thread::sleep_for( std::chrono::microseconds( m_RandGen() % 300 + 25 ) );
       break;
    default: break;
    }

@@ -27,25 +27,23 @@ SOFTWARE.
 #pragma once
 
 #include "stdafx.h"
+#include "CCursorEvent.h"
+#include <future>
 
-class CCursorEvent
+class CClickSequence
 {
 public:
+   CClickSequence() = default;
+   CClickSequence( std::initializer_list<CCursorEvent> lEvents );
+   ~CClickSequence();
 
-   enum ECursorEvent
-   {
-      CLICK,
-      MOVE,
-      PAUSE
-   };
+   void AddEvent( const CCursorEvent& oEvent );
+   void AddEvent( CCursorEvent::ECursorEvent eEvent );
 
-   CCursorEvent( ECursorEvent eEvent );
-   CCursorEvent( const CCursorEvent& oEvent );
-   ~CCursorEvent() = default;
-
-   void Execute();
+   void Run( std::chrono::milliseconds tInterval, size_t iIterations );
 
 private:
-   ECursorEvent    m_eEvent;
-   std::mt19937_64 m_RandGen;
+   std::vector<CCursorEvent> m_vecEvents;
+   std::promise<void> m_oExitSignal;
 };
+

@@ -33,6 +33,9 @@
     <ClInclude Include="CCursorEvent.h">
       <Filter>Models</Filter>
     </ClInclude>
+    <ClInclude Include="CClickSequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -43,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="CCursorEvent.cpp">
       <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="CClickSequence.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

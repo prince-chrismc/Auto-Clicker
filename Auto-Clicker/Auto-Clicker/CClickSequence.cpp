@@ -24,28 +24,38 @@ SOFTWARE.
 
 */
 
-#pragma once
-
 #include "stdafx.h"
+#include "CClickSequence.h"
+#include <future>
 
-class CCursorEvent
+CClickSequence::CClickSequence( std::initializer_list<CCursorEvent> lEvents ) : m_vecEvents( lEvents )
 {
-public:
+}
 
-   enum ECursorEvent
-   {
-      CLICK,
-      MOVE,
-      PAUSE
-   };
+CClickSequence::~CClickSequence()
+{
+   m_oExitSignal.set_value();
+}
 
-   CCursorEvent( ECursorEvent eEvent );
-   CCursorEvent( const CCursorEvent& oEvent );
-   ~CCursorEvent() = default;
+void CClickSequence::AddEvent( const CCursorEvent & oEvent )
+{
+   m_vecEvents.push_back( oEvent );
+}
 
-   void Execute();
+void CClickSequence::AddEvent( CCursorEvent::ECursorEvent eEvent )
+{
+   m_vecEvents.emplace_back( eEvent );
+}
 
-private:
-   ECursorEvent    m_eEvent;
-   std::mt19937_64 m_RandGen;
-};
+void CClickSequence::Run( std::chrono::milliseconds tInterval, size_t iIterations )
+{
+   std::async( std::launch::async, [ &lEvents = m_vecEvents, oExitEvent = m_oExitSignal.get_future(), tInterval, iIterations ](){
+      size_t iCounter = 0;
+      while( oExitEvent.wait_for( tInterval ) == std::future_status::timeout )
+      {
+         lEvents.begin()->Execute();
+
+         if( ++iCounter >= iIterations ) break;
+      }
+   });
+}
