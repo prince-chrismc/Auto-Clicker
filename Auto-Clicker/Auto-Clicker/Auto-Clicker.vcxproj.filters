@@ -31,7 +31,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CCursorEvent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,7 +42,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CCursorEvent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

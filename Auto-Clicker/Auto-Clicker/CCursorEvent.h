@@ -26,6 +26,8 @@ SOFTWARE.
 
 #pragma once
 
+#include "stdafx.h"
+
 class CCursorEvent
 {
 public:
