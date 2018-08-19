@@ -1,2 +1,2 @@
-# Auto-Clicker <img src="Docs/click-512.png" width="52" height="52" title="Github Logo">
+# Auto-Clicker <img src="https://github.com/prince-chrismc/Auto-Clicker/blob/master/click-512.png" width="52" height="52" title="Logo">
 A simple MVC auto clicking application.
