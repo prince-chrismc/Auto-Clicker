@@ -41,11 +41,35 @@ public:
 
    CCursorEvent( ECursorEvent eEvent );
    CCursorEvent( const CCursorEvent& oEvent );
-   ~CCursorEvent() = default;
+   virtual ~CCursorEvent() = default;
 
-   void Execute();
+   virtual void Execute() = 0;
+
+protected:
+   std::mt19937_64 m_RandGen;
 
 private:
    ECursorEvent    m_eEvent;
-   std::mt19937_64 m_RandGen;
+};
+
+
+class CCursorClick : public CCursorEvent
+{
+public:
+   CCursorClick();
+   ~CCursorClick() = default;
+
+   void Execute() override;
+};
+
+class CCursorPause : public CCursorEvent
+{
+public:
+   CCursorPause( std::chrono::milliseconds tDuration );
+   ~CCursorPause() = default;
+
+   void Execute() override;
+
+private:
+   const std::chrono::milliseconds m_tDuration;
 };

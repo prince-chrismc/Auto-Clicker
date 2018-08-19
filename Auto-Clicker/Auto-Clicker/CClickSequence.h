@@ -34,16 +34,13 @@ class CClickSequence
 {
 public:
    CClickSequence() = default;
-   CClickSequence( std::initializer_list<CCursorEvent> lEvents );
+   CClickSequence( std::initializer_list<std::shared_ptr<CCursorEvent>> lEvents );
    ~CClickSequence();
 
-   void AddEvent( const CCursorEvent& oEvent );
-   void AddEvent( CCursorEvent::ECursorEvent eEvent );
-
-   void Run( std::chrono::milliseconds tInterval, size_t iIterations );
+   void Run( size_t iIterations );
 
 private:
-   std::vector<CCursorEvent> m_vecEvents;
+   std::vector<std::shared_ptr<CCursorEvent>> m_lEvents;
    std::promise<void> m_oExitSignal;
 };
 

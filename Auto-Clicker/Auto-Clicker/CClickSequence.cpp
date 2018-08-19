@@ -26,9 +26,9 @@ SOFTWARE.
 
 #include "stdafx.h"
 #include "CClickSequence.h"
-#include <future>
+#include <thread>
 
-CClickSequence::CClickSequence( std::initializer_list<CCursorEvent> lEvents ) : m_vecEvents( lEvents )
+CClickSequence::CClickSequence( std::initializer_list<std::shared_ptr<CCursorEvent>> lEvents ) : m_lEvents( lEvents )
 {
 }
 
@@ -37,25 +37,20 @@ CClickSequence::~CClickSequence()
    m_oExitSignal.set_value();
 }
 
-void CClickSequence::AddEvent( const CCursorEvent & oEvent )
+void CClickSequence::Run( size_t iIterations )
 {
-   m_vecEvents.push_back( oEvent );
-}
-
-void CClickSequence::AddEvent( CCursorEvent::ECursorEvent eEvent )
-{
-   m_vecEvents.emplace_back( eEvent );
-}
-
-void CClickSequence::Run( std::chrono::milliseconds tInterval, size_t iIterations )
-{
-   std::async( std::launch::async, [ &lEvents = m_vecEvents, oExitEvent = m_oExitSignal.get_future(), tInterval, iIterations ](){
+   std::thread oThread( [ &lEvents = m_lEvents, oExitEvent = m_oExitSignal.get_future(), iIterations ](){
       size_t iCounter = 0;
-      while( oExitEvent.wait_for( tInterval ) == std::future_status::timeout )
+      while( oExitEvent.wait_for( 10ms ) == std::future_status::timeout )
       {
-         lEvents.begin()->Execute();
+         for( auto& oEvent : lEvents )
+         {
+            oEvent->Execute();
+         }
 
          if( ++iCounter >= iIterations ) break;
       }
    });
+
+   oThread.detach();
 }
