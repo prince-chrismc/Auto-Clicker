@@ -39,8 +39,11 @@ public:
 
    void Run( size_t iIterations );
 
+   const size_t& GetRemainingInteration() const { return m_nCounter; }
+
 private:
    std::vector<std::shared_ptr<CCursorEvent>> m_lEvents;
+   size_t m_nCounter;
    std::promise<void> m_oExitSignal;
 };
 

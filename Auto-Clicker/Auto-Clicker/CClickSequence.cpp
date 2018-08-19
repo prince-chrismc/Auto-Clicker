@@ -27,6 +27,7 @@ SOFTWARE.
 #include "stdafx.h"
 #include "CClickSequence.h"
 #include <thread>
+//#include <windows.h>
 
 CClickSequence::CClickSequence( std::initializer_list<std::shared_ptr<CCursorEvent>> lEvents ) : m_lEvents( lEvents )
 {
@@ -39,16 +40,17 @@ CClickSequence::~CClickSequence()
 
 void CClickSequence::Run( size_t iIterations )
 {
-   std::thread oThread( [ &lEvents = m_lEvents, oExitEvent = m_oExitSignal.get_future(), iIterations ](){
-      size_t iCounter = 0;
+   m_nCounter = iIterations;
+   std::thread oThread( [ oExitEvent = m_oExitSignal.get_future(), this ](){
       while( oExitEvent.wait_for( 10ms ) == std::future_status::timeout )
       {
-         for( auto& oEvent : lEvents )
+         for( auto& oEvent : m_lEvents )
          {
             oEvent->Execute();
          }
+         //OutputDebugStringA( "Tick...\r\n" );
 
-         if( ++iCounter >= iIterations ) break;
+         if( --m_nCounter == 0 ) break;
       }
    });
 
