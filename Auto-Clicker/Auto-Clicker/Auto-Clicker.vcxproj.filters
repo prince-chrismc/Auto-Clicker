@@ -36,6 +36,9 @@
     <ClInclude Include="CClickSequence.h">
       <Filter>Models</Filter>
     </ClInclude>
+    <ClInclude Include="CConsoleView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -49,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="CClickSequence.cpp">
       <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="CConsoleView.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
