@@ -37,6 +37,9 @@
       <Filter>Models</Filter>
     </ClInclude>
     <ClInclude Include="CConsoleView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyboardEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,6 +57,9 @@
       <Filter>Models</Filter>
     </ClCompile>
     <ClCompile Include="CConsoleView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyboardEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

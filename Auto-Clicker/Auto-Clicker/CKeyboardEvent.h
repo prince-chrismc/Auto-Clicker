@@ -26,59 +26,9 @@ SOFTWARE.
 
 #pragma once
 
-#include "stdafx.h"
-
-class CCursorEvent
+class CKeyboardEvent
 {
 public:
-
-   enum ECursorEvent
-   {
-      CLICK,
-      MOVE,
-      PAUSE
-   };
-
-   CCursorEvent( ECursorEvent eEvent );
-   CCursorEvent( const CCursorEvent& oEvent );
-   virtual ~CCursorEvent() = default;
-
-   virtual void Execute() = 0;
-
-protected:
-   std::mt19937_64 m_RandGen;
-
-private:
-   ECursorEvent    m_eEvent;
-};
-
-
-class CCursorClick : public CCursorEvent
-{
-public:
-   enum ECursorClick
-   {
-      RIGHT,
-      LEFT
-   };
-
-   CCursorClick( ECursorClick eClick );
-   ~CCursorClick() = default;
-
-   void Execute() override;
-
-private:
-   ECursorClick m_eClick;
-};
-
-class CCursorPause : public CCursorEvent
-{
-public:
-   CCursorPause( std::chrono::milliseconds tDuration );
-   ~CCursorPause() = default;
-
-   void Execute() override;
-
-private:
-   const std::chrono::milliseconds m_tDuration;
+   CKeyboardEvent();
+   ~CKeyboardEvent();
 };

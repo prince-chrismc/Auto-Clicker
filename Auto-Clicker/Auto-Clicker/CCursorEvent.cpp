@@ -33,15 +33,32 @@ CCursorEvent::CCursorEvent( const CCursorEvent & oEvent ) : CCursorEvent( oEvent
 //   }
 //}
 
-CCursorClick::CCursorClick() : CCursorEvent( CLICK )
+CCursorClick::CCursorClick( ECursorClick eClick ) : CCursorEvent( CLICK ), m_eClick( eClick )
 {
 }
 
 void CCursorClick::Execute()
 {
-   mouse_event( MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0 );
+   unsigned long long PRESS_DOWN = -1;
+   unsigned long long PRESS_UP = -1;
+
+   switch( m_eClick )
+   {
+   case LEFT:
+      PRESS_DOWN = MOUSEEVENTF_LEFTDOWN;
+      PRESS_UP = MOUSEEVENTF_LEFTUP;
+      break;
+   case RIGHT:
+      PRESS_DOWN = MOUSEEVENTF_LEFTDOWN;
+      PRESS_UP = MOUSEEVENTF_LEFTUP;
+      break;
+   default:
+      break;
+   }
+
+   mouse_event( PRESS_DOWN, 0, 0, 0, 0 );
    std::this_thread::sleep_for( std::chrono::microseconds( m_RandGen() % 300 ) + 27us );
-   mouse_event( MOUSEEVENTF_LEFTUP, 0, 0, 0, 0 );
+   mouse_event( PRESS_UP, 0, 0, 0, 0 );
 }
 
 CCursorPause::CCursorPause( std::chrono::milliseconds tDuration ) : CCursorEvent( PAUSE ), m_tDuration( tDuration )
