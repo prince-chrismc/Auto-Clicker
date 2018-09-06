@@ -67,5 +67,7 @@ CCursorPause::CCursorPause( std::chrono::milliseconds tDuration ) : CCursorEvent
 
 void CCursorPause::Execute()
 {
-   std::this_thread::sleep_for( std::chrono::milliseconds( m_RandGen() % 75 ) + m_tDuration );
+   std::chrono::microseconds nSleepDuration = std::chrono::duration_cast<std::chrono::microseconds>( m_tDuration );
+   nSleepDuration += std::chrono::duration_cast<std::chrono::microseconds>( nSleepDuration * ( ( m_RandGen() % 100 ) / 1000.01 ) );
+   std::this_thread::sleep_for( nSleepDuration );
 }
