@@ -30,11 +30,20 @@ class CConsoleView
 {
 public:
    CConsoleView( const std::string& sTitle, double nVersion );
-   ~CConsoleView() = default;
 
    size_t GetNumberOfClicks();
    size_t GetIntervalDuration();
+   bool   GetRunAgain();
 
    void DisplayCountdown();
    void DisplayRemaining( size_t nClicks, std::chrono::milliseconds nMs );
+   void DisplayFinished();
+
+   void Reset();
+
+private:
+   const std::string m_sTitle;
+   const double m_nVersion;
+
+   void _PrintTitle();
 };

@@ -30,13 +30,13 @@ SOFTWARE.
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <iomanip>
+#include <thread>
 
 CConsoleView::CConsoleView( const std::string & sTitle, double nVersion )
+   : m_sTitle( sTitle )
+   , m_nVersion( nVersion )
 {
-   std::wstring swTitle( sTitle.begin(), sTitle.end() );
-   SetConsoleTitle( swTitle.c_str() );
-   std::cout << sTitle;
-   std::cout << std::endl << "Version " << std::setprecision( 2 ) << nVersion << std::endl;
+   _PrintTitle();
 }
 
 size_t CConsoleView::GetNumberOfClicks()
@@ -55,14 +55,30 @@ size_t CConsoleView::GetIntervalDuration()
    return sleep;
 }
 
+bool CConsoleView::GetRunAgain()
+{
+   bool bRetval = false;
+   std::string choice = "";
+
+   std::cout << std::endl << std::endl << "(y/n) Again: ";
+   std::cin >> choice;
+   if( choice == "y" )
+   {
+      bRetval = true;
+   }
+
+   std::cin.get();
+   return bRetval;
+}
+
 void CConsoleView::DisplayCountdown()
 {
    std::cout << std::endl << "Starting in 3...";
-   Sleep( 1000 );
+   std::this_thread::sleep_for( 1s );
    std::cout << std::endl << "Starting in 2...";
-   Sleep( 1000 );
+   std::this_thread::sleep_for( 1s );
    std::cout << std::endl << "Starting in 1...";
-   Sleep( 1000 );
+   std::this_thread::sleep_for( 1s );
    std::cout << std::endl << "In Progress...";
 }
 
@@ -72,11 +88,30 @@ void CConsoleView::DisplayRemaining( size_t nClicks, std::chrono::milliseconds n
    HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
    SetConsoleCursorPosition( hConsole, c );
 
-   size_t etc_ms = ( nClicks > 0 ) ? nClicks * nMs.count() : 0;
+   std::chrono::milliseconds nEtcInMs( ( nClicks > 0 ) ? nClicks * nMs.count() : 0 );
+   std::chrono::minutes nEtcMinutes = std::chrono::duration_cast<std::chrono::minutes>( nEtcInMs );
+   std::chrono::hours nEtcHours = std::chrono::duration_cast<std::chrono::hours>( nEtcInMs );
 
-   const double etc_min = etc_ms / 60000.0;
    std::cout << std::endl << "Clicks remaining: " << nClicks << ".";
-   std::cout << std::endl << "Duration till end (ms): " << etc_ms << ".";
-   std::cout << std::endl << "Duration till end (min): " << std::setprecision( 3 ) << etc_min << ".";
+   std::cout << std::endl << "Estimated time to completion: " << nEtcInMs.count() << "ms";
+   std::cout << std::endl << "or...                         " << nEtcHours.count() << "hrs and " << nEtcMinutes.count() % 60 << "min.";
 }
 
+void CConsoleView::DisplayFinished()
+{
+   std::cout << std::endl << std::endl << "AutoClicker Finished.";
+}
+
+void CConsoleView::Reset()
+{
+   system( "cls" );
+   _PrintTitle();
+}
+
+void CConsoleView::_PrintTitle()
+{
+   std::wstring swTitle( m_sTitle.begin(), m_sTitle.end() );
+   SetConsoleTitle( swTitle.c_str() );
+   std::cout << m_sTitle << std::endl << "Version ";
+   printf( "%.01f\r\n", m_nVersion );
+}
