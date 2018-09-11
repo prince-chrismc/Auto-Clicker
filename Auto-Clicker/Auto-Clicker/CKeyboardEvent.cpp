@@ -27,10 +27,24 @@ SOFTWARE.
 #include "stdafx.h"
 #include "CKeyboardEvent.h"
 
-CKeyboardEvent::CKeyboardEvent()
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <thread>
+
+CKeyboardEvent::CKeyboardEvent( EKeyboardEvent eKey ) : m_eKeyEvent( eKey )
 {
 }
 
-CKeyboardEvent::~CKeyboardEvent()
+void CKeyboardEvent::Execute()
 {
+   HWND oWindow = FindWindowA( NULL, "TEST_!@#" );
+   BOOL bRetval = SetForegroundWindow( oWindow );
+
+   // key down
+   keybd_event( VK_SPACE, 0x45, KEYEVENTF_EXTENDEDKEY | 0, 0 );
+
+   std::this_thread::sleep_for( std::chrono::microseconds( m_RandGen() % 300 ) + 27us );
+
+   // Simulate a key release
+   keybd_event( VK_SPACE, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0 );
 }

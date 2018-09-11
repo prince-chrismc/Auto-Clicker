@@ -29,7 +29,7 @@ SOFTWARE.
 #include <thread>
 //#include <windows.h>
 
-CClickSequence::CClickSequence( std::initializer_list<std::shared_ptr<CCursorEvent>> lEvents ) : m_lEvents( lEvents )
+CClickSequence::CClickSequence( std::initializer_list<std::shared_ptr<CEvent>> lEvents ) : m_lEvents( lEvents )
 {
 }
 

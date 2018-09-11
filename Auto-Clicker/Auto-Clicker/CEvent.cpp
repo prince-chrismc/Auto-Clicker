@@ -24,26 +24,9 @@ SOFTWARE.
 
 */
 
-#pragma once
-
 #include "stdafx.h"
 #include "CEvent.h"
-#include <future>
 
-class CClickSequence final
+CEvent::CEvent() : m_RandGen( std::random_device{}( ) )
 {
-public:
-   CClickSequence() = default;
-   CClickSequence( std::initializer_list<std::shared_ptr<CEvent>> lEvents );
-   ~CClickSequence();
-
-   void Run( size_t nIterations );
-
-   const size_t& GetRemainingInteration() const { return m_nCounter; }
-
-private:
-   std::vector<std::shared_ptr<CEvent>> m_lEvents;
-   size_t m_nCounter;
-   std::promise<void> m_oExitSignal;
-};
-
+}

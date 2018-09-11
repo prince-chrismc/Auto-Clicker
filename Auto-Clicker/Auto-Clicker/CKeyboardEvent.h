@@ -26,9 +26,22 @@ SOFTWARE.
 
 #pragma once
 
-class CKeyboardEvent
+#include "CEvent.h"
+
+class CKeyboardEvent : public CEvent
 {
 public:
-   CKeyboardEvent();
-   ~CKeyboardEvent();
+
+   enum EKeyboardEvent
+   {
+      SPACE
+   };
+
+   CKeyboardEvent( EKeyboardEvent eKey );
+   ~CKeyboardEvent() = default;
+
+   void Execute() override;
+
+private:
+   const EKeyboardEvent m_eKeyEvent;
 };

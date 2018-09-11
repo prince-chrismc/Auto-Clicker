@@ -27,11 +27,11 @@ SOFTWARE.
 #pragma once
 
 #include "stdafx.h"
+#include "CEvent.h"
 
-class CCursorEvent
+class CCursorEvent abstract : public CEvent
 {
 public:
-
    enum ECursorEvent
    {
       CLICK,
@@ -42,11 +42,6 @@ public:
    CCursorEvent( ECursorEvent eEvent );
    CCursorEvent( const CCursorEvent& oEvent );
    virtual ~CCursorEvent() = default;
-
-   virtual void Execute() = 0;
-
-protected:
-   std::mt19937_64 m_RandGen;
 
 private:
    ECursorEvent    m_eEvent;
