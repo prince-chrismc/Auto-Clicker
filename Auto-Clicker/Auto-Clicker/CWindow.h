@@ -24,24 +24,36 @@ SOFTWARE.
 
 */
 
-#include "stdafx.h"
-#include "CKeyboardEvent.h"
-#include "CWindow.h"
-#include <thread>
+#pragma once
 
-CKeyboardEvent::CKeyboardEvent( EKeyboardEvent eKey ) : m_eKeyEvent( eKey )
+#include <mutex>
+#include <memory>
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+class CWindow final
 {
-}
+public:
+   ~CWindow() = default;
 
-void CKeyboardEvent::Execute()
-{
-   CWindow::GetInstance().SetAsFocus();
+   CWindow( const CWindow& ) = delete;
+   CWindow( const CWindow&& ) = delete;
+   CWindow& operator=( const CWindow& ) = delete;
+   CWindow& operator=( const CWindow&& ) = delete;
 
-   // Simulate a key press
-   keybd_event( VK_NUMPAD2, 0x45, KEYEVENTF_EXTENDEDKEY | 0, 0 );
+   static CWindow& CreateInstance( const std::string_view& name ) noexcept { std::call_once( s_Flag, [ &name = name ]() { s_Instance.reset( new CWindow( name ) ); } ); return *s_Instance; }
+   static const CWindow& GetInstance() { if( s_Instance ) return *s_Instance;  throw std::exception{ "Object not initialized" }; }
 
-   std::this_thread::sleep_for( std::chrono::microseconds( m_RandGen() % 300 ) + 27us );
+   explicit operator bool() const { return ( m_oWindow != NULL ); }
 
-   // Simulate a key release
-   keybd_event( VK_NUMPAD2, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0 );
-}
+   const CWindow& SetAsFocus() const;
+
+private:
+   explicit CWindow( const std::string_view& name );
+
+   HWND m_oWindow;
+
+   static std::once_flag s_Flag;
+   static std::unique_ptr<CWindow> s_Instance;
+};

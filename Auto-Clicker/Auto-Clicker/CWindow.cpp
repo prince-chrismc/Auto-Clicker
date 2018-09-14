@@ -25,23 +25,19 @@ SOFTWARE.
 */
 
 #include "stdafx.h"
-#include "CKeyboardEvent.h"
 #include "CWindow.h"
-#include <thread>
 
-CKeyboardEvent::CKeyboardEvent( EKeyboardEvent eKey ) : m_eKeyEvent( eKey )
+std::once_flag CWindow::s_Flag;
+std::unique_ptr<CWindow> CWindow::s_Instance;
+
+CWindow::CWindow( const std::string_view& name ) : m_oWindow( NULL )
 {
+   m_oWindow = FindWindowA( NULL, name.data() );
 }
 
-void CKeyboardEvent::Execute()
+const CWindow & CWindow::SetAsFocus() const
 {
-   CWindow::GetInstance().SetAsFocus();
+   bool bRetval = SetForegroundWindow( m_oWindow );
 
-   // Simulate a key press
-   keybd_event( VK_NUMPAD2, 0x45, KEYEVENTF_EXTENDEDKEY | 0, 0 );
-
-   std::this_thread::sleep_for( std::chrono::microseconds( m_RandGen() % 300 ) + 27us );
-
-   // Simulate a key release
-   keybd_event( VK_NUMPAD2, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0 );
+   return *this;
 }
